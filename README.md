@@ -1,4 +1,4 @@
-# Aira Personal Server — Docker 自动构建部署
+﻿# Aira Personal Server — Docker 自动构建部署
 
 本仓库跟踪上游 [mason173/aira-browser](https://github.com/mason173/aira-browser) 的 `services/personal-server`，由 GitHub Actions 自动构建 Docker 镜像并发布到 GitHub Container Registry（GHCR），部署端通过 Watchtower 自动拉取更新。
 
@@ -11,7 +11,7 @@
 本仓库 services/personal-server  ──有变化──▶  GitHub Actions 构建
         │                                        │
         └── 无变化则跳过                          ▼
-                                        ghcr.io/<你的用户名>/aira-personal-server:latest
+                                        ghcr.io/ZsyzLahz/aira-personal-server:latest
                                                  │
                                                  ▼  Watchtower 每 5 分钟检查
                                         服务器上 docker compose 自动滚动更新
@@ -28,8 +28,8 @@
 ```bash
 mkdir -p ~/aira-server && cd ~/aira-server
 # 下载仓库中的 docker-compose.yml 和 .env.example
-curl -fsSLO https://raw.githubusercontent.com/<你的用户名>/aira-personal-server/main/docker-compose.yml
-curl -fsSLo .env https://raw.githubusercontent.com/<你的用户名>/aira-personal-server/main/.env.example
+curl -fsSLO https://raw.githubusercontent.com/ZsyzLahz/aira-personal-server/main/docker-compose.yml
+curl -fsSLo .env https://raw.githubusercontent.com/ZsyzLahz/aira-personal-server/main/.env.example
 
 # 编辑 .env 填写对外访问地址（可选）
 vi .env
