@@ -11,7 +11,7 @@
 本仓库 services/personal-server  ──有变化──▶  GitHub Actions 构建
         │                                        │
         └── 无变化则跳过                          ▼
-                                        ghcr.io/ZsyzLahz/aira-personal-server:latest
+                                        ghcr.io/zsyzlahz/aira-personal-server:latest
                                                  │
                                                  ▼  Watchtower 每 5 分钟检查
                                         服务器上 docker compose 自动滚动更新
