@@ -1,6 +1,6 @@
 # Aira Personal Server — docker-compose 部署
 # 镜像由 GitHub Actions 自动构建并推送（随上游自动更新），
-# Watchtower 每 5 分钟检查一次新镜像并自动滚动更新。
+# 自动拉取由 NAS 上已部署的 Watchtower 负责（镜像为公开镜像，无需登录凭据）。
 #
 # 首次部署：
 #   cp .env.example .env   # 按需修改 AIRA_PUBLIC_URL
@@ -22,14 +22,6 @@ services:
       AIRA_PUBLIC_URL: ${AIRA_PUBLIC_URL:-}
     volumes:
       - aira-data:/data
-
-  watchtower:
-    image: containrrr/watchtower:latest
-    container_name: aira-watchtower
-    restart: unless-stopped
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    command: --interval 300 --cleanup aira-server
 
 volumes:
   aira-data:
