@@ -11,7 +11,7 @@
 本仓库 services/personal-server  ──有变化──▶  GitHub Actions 构建
         │                                        │
         └── 无变化则跳过                          ▼
-                                        ghcr.io/ZsyzLahzz/aira-personal-server:latest
+                                        ghcr.io/ZsyzLahz/aira-personal-server:latest
                                                  │
                                                  ▼  Watchtower 每 5 分钟检查
                                         服务器上 docker compose 自动滚动更新
@@ -28,8 +28,8 @@
 ```bash
 mkdir -p ~/aira-server && cd ~/aira-server
 # 下载仓库中的 docker-compose.yml 和 .env.example
-curl -fsSLO https://raw.githubusercontent.com/ZsyzLahzz/aira-personal-server/main/docker-compose.yml
-curl -fsSLo .env https://raw.githubusercontent.com/ZsyzLahzz/aira-personal-server/main/.env.example
+curl -fsSLO https://raw.githubusercontent.com/ZsyzLahz/aira-personal-server/main/docker-compose.yml
+curl -fsSLo .env https://raw.githubusercontent.com/ZsyzLahz/aira-personal-server/main/.env.example
 
 # 编辑 .env 填写对外访问地址（可选）
 vi .env
@@ -55,28 +55,6 @@ docker compose exec aira-server cat /data/setup-code
 
   反代 request-body 上限保持 12 MiB 以上，并保留 `Authorization` 头。
 - 局域网直接访问：把 compose 中的 `"127.0.0.1:8787:8787"` 改为 `"8787:8787"`。
-
-### 镜像包可见性（重要，二选一）
-
-**方式 A（推荐）**：把镜像包设为 public，服务器无需登录即可拉取。
-打开 <https://github.com/users/ZsyzLahz/packages/container/aira-personal-server/settings> → 底部 **Danger Zone** → **Change visibility** → 选择 **Public** 确认。设置一次即可，之后的镜像版本保持 public。
-
-**方式 B（保持 private）**：服务器需要先登录 GHCR，并把凭据挂给 Watchtower：
-
-```bash
-# 用一个只有 read:packages 权限的 PAT 登录
-echo "YOUR_PAT" | docker login ghcr.io -u ZsyzLahz --password-stdin
-```
-
-并在 `docker-compose.yml` 的 `watchtower` 服务中增加凭据挂载：
-
-```yaml
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /root/.docker/config.json:/config.json:ro
-```
-
-> 注意：`docker login` 会把凭据写入当前用户的 `~/.docker/config.json`，挂载路径需与实际用户 home 一致。
 
 ## 手动操作
 
