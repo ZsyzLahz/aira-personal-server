@@ -1,0 +1,35 @@
+# Aira Personal Server — docker-compose 部署
+# 镜像由 GitHub Actions 自动构建并推送（随上游自动更新），
+# Watchtower 每 5 分钟检查一次新镜像并自动滚动更新。
+#
+# 首次部署：
+#   cp .env.example .env   # 按需修改 AIRA_PUBLIC_URL
+#   docker compose up -d
+#   docker compose exec aira-server cat /data/setup-code   # 查看配对码
+#
+# 说明：
+#   - 默认端口仅绑定 127.0.0.1，公网访问请在前置 Nginx/Caddy 反代并启用 HTTPS
+#   - 如需局域网直接访问，将 "127.0.0.1:8787:8787" 改为 "8787:8787"
+
+services:
+  aira-server:
+    image: ghcr.io/OWNER_PLACEHOLDER/aira-personal-server:latest
+    container_name: aira-server
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8787:8787"
+    environment:
+      AIRA_PUBLIC_URL: ${AIRA_PUBLIC_URL:-}
+    volumes:
+      - aira-data:/data
+
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: aira-watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 300 --cleanup aira-server
+
+volumes:
+  aira-data:
