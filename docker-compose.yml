@@ -13,7 +13,7 @@
 
 services:
   aira-server:
-    image: ghcr.io/zsylahz/aira-personal-server:latest
+    image: ghcr.io/zsyzlahz/aira-personal-server:latest
     container_name: aira-server
     restart: unless-stopped
     ports:
