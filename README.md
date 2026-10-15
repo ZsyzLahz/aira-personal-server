@@ -1,6 +1,6 @@
 ﻿# Aira Personal Server — Docker 自动构建部署
 
-本仓库跟踪上游 [mason173/aira-browser](https://github.com/mason173/aira-browser) 的 `services/personal-server`，由 GitHub Actions 自动构建 Docker 镜像并发布到 GitHub Container Registry（GHCR），部署端通过 Watchtower 自动拉取更新。
+本仓库跟踪上游 [mason173/aira-browser](https://github.com/mason173/aira-browser) 的 `services/personal-server`，由 GitHub Actions 自动构建 Docker 镜像并发布到 GitHub Container Registry（GHCR），镜像更新由 NAS 上已部署的 Watchtower 自动拉取。
 
 ## 工作机制
 
@@ -13,13 +13,13 @@
         └── 无变化则跳过                          ▼
                                         ghcr.io/zsyzlahz/aira-personal-server:latest
                                                  │
-                                                 ▼  Watchtower 每 5 分钟检查
-                                        服务器上 docker compose 自动滚动更新
+                                                 ▼  NAS 上已有的 Watchtower 定期检查
+                                        拉取新镜像并滚动更新 aira-server
 ```
 
 - **自动同步**：定时任务拉取上游最新代码，有变化才提交并构建
 - **自动构建**：推送到 `main` 或上游有更新时，构建并推送 `latest` 和 `sha-xxxxxxx` 两个 tag
-- **自动更新**：部署端 Watchtower 监听新镜像，自动 `pull` 并重建容器，数据卷不受影响
+- **自动更新**：NAS 上已部署的 Watchtower 监听新镜像，自动 `pull` 并重建容器，数据卷不受影响
 
 ## 部署（目标服务器上执行）
 
@@ -59,7 +59,7 @@ docker compose exec aira-server cat /data/setup-code
 ## 手动操作
 
 - 手动触发同步+构建：仓库 Actions 页面 → `Build & Publish Personal Server Image` → `Run workflow`
-- 停用自动更新：`docker compose stop watchtower`
+- 手动立即更新：`docker compose pull aira-server && docker compose up -d aira-server`
 - 备份/恢复：见上游文档 `services/personal-server/docs/operations.md`
 
 ## 许可
